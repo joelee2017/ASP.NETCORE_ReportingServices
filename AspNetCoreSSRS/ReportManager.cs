@@ -6,7 +6,7 @@ using System.Net;
 using System.ServiceModel;
 using System.Threading.Tasks;
 
-namespace KGI.ReportComponent.Helper
+namespace AspNetCoreSSRS
 {
     public class ReportManager
     {
