@@ -4,7 +4,7 @@ using System.IO;
 using System.Net;
 using System.Text;
 
-namespace AspNetCoreSSRS.Helper
+namespace AspNetCoreSSRS
 {
     public enum ReportFormats
     {
