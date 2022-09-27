@@ -4,7 +4,7 @@ using System.IO;
 using System.Net;
 using System.Text;
 
-namespace KGI.ReportComponent.Helper
+namespace AspNetCoreSSRS.Helper
 {
     public enum ReportFormats
     {
