@@ -17,7 +17,7 @@ using Utility.Helper;
 
 namespace KGI.ReportComponent
 {
-    public partial class ReportServiceExample : IReportService
+    public partial class ReportServiceExample
     {
         IConfiguration _configuration;
         IMailService _mailService;
