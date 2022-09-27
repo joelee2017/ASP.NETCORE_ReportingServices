@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace KGI.ReportComponent
 {
     // ReportService 輔助工具
-    public partial class ReportServiceExample
+    public partial class ReportExample
     {
         /// <summary>
         /// 報表至指定位置
