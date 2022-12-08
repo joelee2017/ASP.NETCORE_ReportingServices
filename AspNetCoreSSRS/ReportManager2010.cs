@@ -4,7 +4,7 @@ using System.IO;
 using System.Net;
 using System.Text;
 
-namespace AspNetCoreSSRS
+namespace KGI.ReportComponent.Helper
 {
     public enum ReportFormats
     {
@@ -12,7 +12,8 @@ namespace AspNetCoreSSRS
         MHtml,
         Pdf,
         Xlsx,
-        Docx
+        Docx,
+        Csv
     }
     public class ReportManager2010 : IDisposable
     {
@@ -54,7 +55,7 @@ namespace AspNetCoreSSRS
             }
         }
 
-        public String ReportFullPath { get { return ReportServerPath + "?/" + ReportPath; } }
+        public String ReportFullPath { get { return ReportServerPath + "?" + ReportPath; } }
 
         public Stream Render()
         {
@@ -110,6 +111,7 @@ namespace AspNetCoreSSRS
             Pdf = new ReportFormat { Code = ReportFormats.Pdf, Instruction = "PDF" };
             Xlsx = new ReportFormat { Code = ReportFormats.Xlsx, Instruction = "EXCELOPENXML" };
             Docx = new ReportFormat { Code = ReportFormats.Docx, Instruction = "WORDOPENXML" };
+            Csv = new ReportFormat { Code = ReportFormats.Csv, Instruction = "CSV" };
         }
 
         private ReportFormat()
@@ -124,16 +126,18 @@ namespace AspNetCoreSSRS
         public static ReportFormat Pdf { get; private set; }
         public static ReportFormat Xlsx { get; private set; }
         public static ReportFormat Docx { get; private set; }
+        public static ReportFormat Csv { get; private set; }
 
         public static ReportFormat ByCode(ReportFormats code)
         {
             switch (code)
             {
                 case ReportFormats.Html: return Html;
-                case ReportFormats.MHtml: return Html; //<<======================
+                case ReportFormats.MHtml: return Html;
                 case ReportFormats.Pdf: return Pdf;
                 case ReportFormats.Xlsx: return Xlsx;
                 case ReportFormats.Docx: return Docx;
+                case ReportFormats.Csv: return Csv;
                 default: return null;
             }
         }
