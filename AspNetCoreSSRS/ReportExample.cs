@@ -68,23 +68,29 @@ namespace KGI.ReportComponent
             //    }
             //}
 
-            //Dictionary<int, Func<ReportModel, byte[], Task>> act = DictionaryFuncMethod();
-
-            //await act[(int)model.Action].Invoke(model, report);
-            List<Tuple<int[], Func<ReportModel, Task<byte[]>>>> act = new List<Tuple<int[], Func<ReportModel, Task<byte[]>>>>()
+            List<Tuple<int[], Func<ReportModel, Task<byte[]>>>> reportact = new List<Tuple<int[], Func<ReportModel, Task<byte[]>>>>()
             {
                 new Tuple<int[], Func<ReportModel, Task<byte[]>>>(new int[] { 0, 1, 2 }, (model) => GetReport2005(model)),
                 new Tuple<int[], Func<ReportModel, Task<byte[]>>>(new int[] { 4, 5, 6 }, (model) => GetReport2010(model)),
             };
 
 
-            foreach (var item in act)
+            foreach (var item in reportact)
             {
                 if (item.Item1.Contains(model.Action))
                 {
-                    report = await item.Item2.Invoke(model, report);
-                    break;
+                    report = await item.Item2.Invoke(model);
                 }
+            }
+
+            //Dictionary<int, Func<ReportModel, byte[], Task>> act = DictionaryFuncMethod();
+
+            //await act[(int)model.Action].Invoke(model, report);
+
+            DictionaryFuncMethod().TryGetValue((int)model.Action, out Func<ReportModel, byte[], Task> act);
+            if(act != null)
+            {
+               await act.Invoke(model, report);
             }
 
             if (model.IsEncrypt)
