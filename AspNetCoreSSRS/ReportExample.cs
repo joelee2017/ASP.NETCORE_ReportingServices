@@ -1,19 +1,11 @@
-using MailComponent.Interface;
-using MicrosoftTeamsComponent.Interface;
-using ReportComponent.Helper;
-using ReportComponent.Interface;
-using ReportComponent.Model;
+using AspNetCoreSSRS;
 using Microsoft.Extensions.Configuration;
-using ReportExecution2005;
-using SimpleImpersonation;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Metrics;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using Utility.Helper;
 
 namespace KGI.ReportComponent
 {
@@ -57,28 +49,43 @@ namespace KGI.ReportComponent
             }
 
             byte[] report = default;
-            if ((int)model.Action != 3)
+            //if ((int)model.Action != 3)
+            //{
+            //    switch ((int)model.Action)
+            //    {
+            //        case 0:
+            //        case 1:
+            //        case 2:
+            //            report = await this.GetReport2005(model);
+            //            break;
+            //        case 4:
+            //        case 5:
+            //        case 6:
+            //            report = await this.GetReport2010(model);
+            //            break;
+            //        default:
+            //            break;
+            //    }
+            //}
+
+            //Dictionary<int, Func<ReportModel, byte[], Task>> act = DictionaryFuncMethod();
+
+            //await act[(int)model.Action].Invoke(model, report);
+            List<Tuple<int[], Func<ReportModel, Task<byte[]>>>> act = new List<Tuple<int[], Func<ReportModel, Task<byte[]>>>>()
             {
-                switch ((int)model.Action)
+                new Tuple<int[], Func<ReportModel, Task<byte[]>>>(new int[] { 0, 1, 2 }, (model) => GetReport2005(model)),
+                new Tuple<int[], Func<ReportModel, Task<byte[]>>>(new int[] { 4, 5, 6 }, (model) => GetReport2010(model)),
+            };
+
+
+            foreach (var item in act)
+            {
+                if (item.Item1.Contains(model.Action))
                 {
-                    case 0:
-                    case 1:
-                    case 2:
-                        report = await this.GetReport2005(model);
-                        break;
-                    case 4:
-                    case 5:
-                    case 6:
-                        report = await this.GetReport2010(model);
-                        break;
-                    default:
-                        break;
+                    report = await item.Item2.Invoke(model, report);
+                    break;
                 }
             }
-
-            Dictionary<int, Func<ReportModel, byte[], Task>> act = DictionaryFuncMethod();
-
-            await act[(int)model.Action].Invoke(model, report);
 
             if (model.IsEncrypt)
             {
@@ -123,7 +130,7 @@ namespace KGI.ReportComponent
         /// </summary>
         /// <param name="model">報表參數</param>
         /// <returns>byte[]</returns>
-        private async Task<byte[]> GetReport2010(ReportModel model) 
+        private async Task<byte[]> GetReport2010(ReportModel model)
                => await CallReportLoop((x) => GetReportByteArray2010(x), model);
 
         // 透過委派方式整合呼叫失敗時遞迴重新呼叫行為
@@ -157,7 +164,7 @@ namespace KGI.ReportComponent
         }
 
         // 呼叫報表 2005
-         private Task<byte[]> GetReportByteArray2005(ReportModel model)
+        private Task<byte[]> GetReportByteArray2005(ReportModel model)
         {
             string reportUrl = model.ReportServerWsdlUrl ?? _configuration.GetSection("ReportServerWsdlUrl").Get<string>();
 

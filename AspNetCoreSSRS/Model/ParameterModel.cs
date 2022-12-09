@@ -1,4 +1,4 @@
-﻿namespace ssrstest001
+﻿namespace AspNetCoreSSRS
 {
     public class ParameterModel
     {

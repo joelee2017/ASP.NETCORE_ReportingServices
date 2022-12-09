@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ssrstest001
+namespace AspNetCoreSSRS
 {
     public class ReportsModel
     {
